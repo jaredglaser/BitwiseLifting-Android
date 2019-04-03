@@ -1,4 +1,4 @@
 local.properties
 BitwiseLifting-Android.iml
-.idea/*
-.gradle/*
+.idea
+.gradle
