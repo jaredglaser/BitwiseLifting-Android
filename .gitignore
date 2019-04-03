@@ -1,2 +1,4 @@
-.grade/*
+local.properties
+BitwiseLifting-Android.iml
 .idea/*
+.gradle/*
