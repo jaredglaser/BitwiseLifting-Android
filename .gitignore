@@ -132,3 +132,12 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.gitignore.io/api/androidstudio
+.idea/gradle.xml
+.idea/runConfigurations.xml
+BitwiseLifting-Android.iml
+BitwiseLifting-Android.iml
+BitwiseLifting-Android.iml
+.idea/codeStyles/Project.xml
+gradle/wrapper/gradle-wrapper.properties
+gradle/wrapper/gradle-wrapper.jar
+
