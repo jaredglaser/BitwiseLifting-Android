@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BitwiseLifting-Android</string>
+    <string-array name="Workouts">
+        <item>Bench</item>
+        <item>Deadlift</item>
+        <item>Power Clean</item>
+        <item>Snatch</item>
+    </string-array>
 </resources>
