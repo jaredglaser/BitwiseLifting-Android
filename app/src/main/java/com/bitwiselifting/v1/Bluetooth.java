@@ -26,6 +26,7 @@ public class Bluetooth extends AppCompatActivity {
 
     protected BluetoothDevice device;
     protected BluetoothService service;
+    protected boolean connected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +70,12 @@ public class Bluetooth extends AppCompatActivity {
              */
             @Override
             public void onDeviceDiscovered(BluetoothDevice bDevice, int rssi) {
-                device = bDevice;
-                connectToDevice();
+                if(!connected) {
+                    device = bDevice;
+                    connected = true;
+                    service.stopScan();
+                    connectToDevice();
+                }
             }
 
             /*
@@ -121,6 +126,7 @@ public class Bluetooth extends AppCompatActivity {
             public void onStatusChange(BluetoothStatus status) {
                 if(status == BluetoothStatus.NONE) {
                     service.disconnect();
+                    connected = false;
                 }
                 Log.d("Status Changed:",status.toString());
 
