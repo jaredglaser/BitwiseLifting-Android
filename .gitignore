@@ -141,3 +141,5 @@ BitwiseLifting-Android.iml
 gradle/wrapper/gradle-wrapper.properties
 gradle/wrapper/gradle-wrapper.jar
 
+local.properties
+gradlew
