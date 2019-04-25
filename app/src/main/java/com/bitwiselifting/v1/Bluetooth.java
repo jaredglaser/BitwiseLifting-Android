@@ -204,9 +204,12 @@ public class Bluetooth extends AppCompatActivity {
             if(datastream != null){
 
                 Log.d("READING",datastream.toString());
-                for(BluetoothGattDescriptor d : datastream.getDescriptors()){
-                    gatt.readDescriptor(d);
-                }
+                gatt.setCharacteristicNotification(datastream,true);
+                //gatt.readDescriptor(datastream.getDescriptors().get(0));
+                //gatt.readDescriptor(datastream.getDescriptors().get(1));
+                BluetoothGattDescriptor d = datastream.getDescriptors().get(1);
+                d.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                gatt.writeDescriptor(d);
             }
         }
 
@@ -220,7 +223,7 @@ public class Bluetooth extends AppCompatActivity {
          */
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic,
                                          int status) {
-            Log.d("CHARACTERISTIC READ",characteristic.toString());
+            Log.d("CHARACTERISTIC READ",characteristic.getValue().toString());
         }
 
         /**
@@ -250,7 +253,8 @@ public class Bluetooth extends AppCompatActivity {
          */
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-            Log.d("CHARACTERISTIC CHANGED",characteristic.toString());
+            Log.d("CHARACTERISTIC CHANGED",characteristic.getStringValue(0));
+            gatt.readCharacteristic(characteristic);
         }
 
         /**
@@ -263,12 +267,12 @@ public class Bluetooth extends AppCompatActivity {
          */
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
                                      int status) {
-            Log.d("DESCRIPTOR READ",descriptor.toString());
-            if(gatt.setCharacteristicNotification(descriptor.getCharacteristic(),true)){
-                Log.d("NOTIFICATION","ENABLED");
-                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                gatt.writeDescriptor(descriptor);
+            byte [] b = descriptor.getValue();
+            for(int i=0;i<descriptor.getValue().length;i++) {
+
+                Log.d("DESCRIPTOR READ", Byte.toString(b[i]));
             }
+
         }
 
         /**
@@ -282,6 +286,8 @@ public class Bluetooth extends AppCompatActivity {
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor,
                                       int status) {
             Log.d("DESCRIPTOR WRITE",descriptor.toString());
+            BluetoothGattCharacteristic c = descriptor.getCharacteristic();
+            gatt.readCharacteristic(c);
         }
 
         /**
