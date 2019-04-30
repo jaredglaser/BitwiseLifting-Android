@@ -24,11 +24,7 @@ public class MainActivity extends AppCompatActivity {
          */
         Button orientationTesting = findViewById(R.id.orientationTestingButton);
         Button bluetoothTesting = findViewById(R.id.bluetoothTestingButton);
-        Spinner workoutChoice = findViewById(R.id.workoutList);
-        ArrayAdapter<String> workoutAdapter = new ArrayAdapter<String>(MainActivity.this,
-                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Workouts));
-        workoutAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        workoutChoice.setAdapter(workoutAdapter);
+        Button startBtn = findViewById(R.id.startButton);
 
         /*
          * Listener Declarations
@@ -44,6 +40,14 @@ public class MainActivity extends AppCompatActivity {
         bluetoothTesting.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent myIntent = new Intent(view.getContext(), Bluetooth.class);
+                startActivityForResult(myIntent, 0);
+
+            }
+        });
+
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent myIntent = new Intent(view.getContext(), Exercise.class);
                 startActivityForResult(myIntent, 0);
 
             }
