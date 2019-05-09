@@ -1,12 +1,20 @@
 package com.bitwiselifting.v1;
 
-import android.content.Intent;
+import android.content.Context;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class Exercise extends AppCompatActivity {
     @Override
@@ -24,23 +32,51 @@ public class Exercise extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Workouts));
         workoutAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         workoutChoice.setAdapter(workoutAdapter);
+        TextView csv = findViewById(R.id.dataDump);
 
         /*
          * Listener Declarations
          */
         startExercise.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), Orientation.class);
-                startActivityForResult(myIntent, 0);
-
+                try {
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(view.getContext().openFileOutput("Test.csv", Context.MODE_PRIVATE));
+                    outputStreamWriter.write("testing");
+                    outputStreamWriter.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         calibrateExercise.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), Orientation.class);
-                startActivityForResult(myIntent, 0);
+                String ret = "";
 
+                try {
+                    InputStream inputStream = view.getContext().openFileInput("Test.csv");
+
+                    if (inputStream != null) {
+                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        String receiveString = "";
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        while ((receiveString = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(receiveString);
+                        }
+
+                        inputStream.close();
+                        ret = stringBuilder.toString();
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                csv.setText(ret);
             }
         });
     }
