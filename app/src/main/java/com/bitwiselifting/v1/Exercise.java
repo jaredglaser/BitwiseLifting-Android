@@ -1,7 +1,6 @@
 package com.bitwiselifting.v1;
 
 import android.content.Context;
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,11 +16,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class Exercise extends AppCompatActivity {
+    int i = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
-
         /*
          * View Declarations
          */
@@ -33,6 +32,10 @@ public class Exercise extends AppCompatActivity {
         workoutAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         workoutChoice.setAdapter(workoutAdapter);
         TextView csv = findViewById(R.id.dataDump);
+        TextView upArrow = findViewById(R.id.up_arrow);
+        TextView downArrow = findViewById(R.id.down_arrow);
+        TextView reps = findViewById(R.id.numberReps);
+        reps.setText("Number of reps: " + i);
 
         /*
          * Listener Declarations
@@ -79,5 +82,22 @@ public class Exercise extends AppCompatActivity {
                 csv.setText(ret);
             }
         });
+
+        upArrow.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                i++;
+                reps.setText("Number of reps: " + i);
+            }
+        });
+
+        downArrow.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if(i > 0) {
+                    i--;
+                }
+                reps.setText("Number of reps: " + i);
+            }
+        });
     }
+
 }

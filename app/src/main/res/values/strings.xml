@@ -5,4 +5,6 @@
         <item>Power Clean</item>
         <item>Snatch</item>
     </string-array>
+    <string name="up_arrow">\uf106</string>
+    <string name="down_arrow">\uf107</string>
 </resources>

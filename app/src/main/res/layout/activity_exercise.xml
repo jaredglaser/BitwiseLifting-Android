@@ -64,6 +64,27 @@
         app:layout_constraintTop_toBottomOf="@+id/workoutList" />
 
     <TextView
+        android:id="@+id/up_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintStart_toEndOf="@+id/numberReps"
+        app:layout_constraintTop_toBottomOf="@+id/workoutList"
+        android:text="@string/up_arrow"
+        app:fontFamily="@font/fa_solid"/>
+
+    <TextView
+        android:id="@+id/down_arrow"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/numberReps"
+        app:layout_constraintTop_toBottomOf="@+id/up_arrow"
+        android:text="@string/down_arrow"
+        app:fontFamily="@font/fa_solid"/>
+
+    <TextView
         android:id="@+id/dataDump"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
