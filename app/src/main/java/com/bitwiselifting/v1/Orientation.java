@@ -15,6 +15,7 @@ public class Orientation extends AppCompatActivity {
      */
     private ImageView barbell;
     private TextView rotationValue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
