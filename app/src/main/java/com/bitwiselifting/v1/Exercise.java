@@ -52,6 +52,9 @@ public class Exercise extends AppCompatActivity {
     private myLeScanCallback leScanCallback = new myLeScanCallback();
     private BluetoothDevice bDevice;
     protected TextView connectedText;
+    protected ArrayList<ArrayList<Float>> calibrationData = new ArrayList<ArrayList<Float>>();
+    protected ArrayList<ArrayList<Float>> lastExData = new ArrayList<ArrayList<Float>>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,86 +109,64 @@ public class Exercise extends AppCompatActivity {
 
 
                 if(wasCalibrate){ //save the data into calibration file
-                    try {
-                        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(view.getContext().openFileOutput("Calibrate.csv", Context.MODE_PRIVATE));
-                        for(String s : data) {
-                            outputStreamWriter.write("\n");
+                    //clear out current calibration data
+                    calibrationData.clear();
+                    //convert the string array into floats
+                    //first remove all of the bad data
+                    ArrayList<String> goodCal = new ArrayList<String>();
+                    for(String s:data){
+                        if(s.length() == 19){
+                            goodCal.add(s);
                         }
-                        outputStreamWriter.close();
                     }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    for(String str:goodCal){
+                        String line= str;
+                        String[] values = line.split(",");
+                        Float[] floatrow = new Float[values.length];
 
-                    String ret = "";
-
-                    try {
-                        InputStream inputStream = view.getContext().openFileInput("Calibrate.csv");
-
-                        if (inputStream != null) {
-                            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                            String receiveString = "";
-                            StringBuilder stringBuilder = new StringBuilder();
-
-                            while ((receiveString = bufferedReader.readLine()) != null) {
-                                stringBuilder.append(receiveString);
-                            }
-
-                            inputStream.close();
-                            ret = stringBuilder.toString();
+                        int i = 0;
+                        for(String s : values){
+                            float res = Float.parseFloat(s);
+                            floatrow[i] = res;
+                            i++;
                         }
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        // this adds the currently parsed line to the 2-dimensional string array
+                        calibrationData.add(new ArrayList<Float>(Arrays.asList(floatrow)));
                     }
 
-                    Log.d("RESULT:",ret);
                 }
                 else{ //compare to calibration file
-                    try {
-                        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(view.getContext().openFileOutput("Current.csv", Context.MODE_PRIVATE));
-                        for(String s : data) {
-                            outputStreamWriter.write("\n");
+                    lastExData.clear();
+                    //convert the string array into floats
+                    //first remove all of the bad data
+                    ArrayList<String> goodEx = new ArrayList<String>();
+                    for(String s:data){
+                        if(s.length() == 19){
+                            goodEx.add(s);
                         }
-                        outputStreamWriter.close();
                     }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    for(String str:goodEx){
+                        String line= str;
+                        String[] values = line.split(",");
+                        Float[] floatrow = new Float[values.length];
 
-
-                    /*
-                    * READ IN THE VALUES
-                     */
-                    String ret = "";
-                    try {
-                        InputStream inputStream = view.getContext().openFileInput("Calibrate.csv");
-
-                        if (inputStream != null) {
-                            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                            String receiveString = "";
-                            StringBuilder stringBuilder = new StringBuilder();
-
-                            while ((receiveString = bufferedReader.readLine()) != null) {
-                                stringBuilder.append(receiveString);
-                            }
-
-                            inputStream.close();
-                            ret = stringBuilder.toString();
+                        int i = 0;
+                        for(String s : values){
+                            float res = Float.parseFloat(s);
+                            floatrow[i] = res;
+                            i++;
                         }
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        // this adds the currently parsed line to the 2-dimensional string array
+                        lastExData.add(new ArrayList<Float>(Arrays.asList(floatrow)));
                     }
-                    //ExerciseData cal = StaticMethods.analyseData(calibration);
-                    //ExerciseData current = StaticMethods.analyseData(currentVals);
 
-                    //Log.d("Calibration:",Double.toString(cal.getAverageTime()));
-                    //Log.d("Current:",Double.toString(current.getAverageTime()));
+
+
+                    ExerciseData cal = StaticMethods.analyseData(calibrationData);
+                    ExerciseData current = StaticMethods.analyseData(lastExData);
+
+                    Log.d("Calibration:",Double.toString(cal.getAverageTime()));
+                    Log.d("Current:",Double.toString(current.getAverageTime()));
                 }
 
                 data.clear();

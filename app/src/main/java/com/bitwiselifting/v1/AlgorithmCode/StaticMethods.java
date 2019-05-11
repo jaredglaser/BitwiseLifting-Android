@@ -17,10 +17,10 @@ public class StaticMethods {
 		/*
 		 * Gather relevant columns of data needed to perform analysis and filter data if needed
 		 */
-		ArrayList<Float> dataColumn = StaticMethods.getColumn(values, 3);
-		ArrayList<Float> tiltColumn = StaticMethods.getColumn(values, 2);
+		ArrayList<Float> dataColumn = StaticMethods.getColumn(values, 2);
+		ArrayList<Float> tiltColumn = StaticMethods.getColumn(values, 1);
 		ArrayList<Float> filteredData = StaticMethods.exponentialFilter(dataColumn);
-		values = StaticMethods.replaceColumn(values, filteredData, 3);
+		values = StaticMethods.replaceColumn(values, filteredData, 2);
 
 		/*
 		 * Write the output of the filtered data for testing
@@ -30,7 +30,7 @@ public class StaticMethods {
 		/*
 		 * Find the zeros in the data with tolerance specified by zeroTolerance
 		 */
-		ArrayList<Float> temp = StaticMethods.findZeros(values, 3, 0,zeroTolerance);
+		ArrayList<Float> temp = StaticMethods.findZeros(values, 2, 0,zeroTolerance);
 		ArrayList<Integer> timesBetweenReps = new ArrayList<Integer>();
 
 		/*
