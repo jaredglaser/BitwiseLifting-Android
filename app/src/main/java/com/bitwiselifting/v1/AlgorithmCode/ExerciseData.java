@@ -1,8 +1,10 @@
 package com.bitwiselifting.v1.AlgorithmCode;
 
+import java.util.ArrayList;
+
 public class ExerciseData {
     private int numReps;
-    private double averageTime;
+    private ArrayList<Integer> averageTime;
     private int maxTilt;
     public int getNumReps() {
         return numReps;
@@ -12,11 +14,11 @@ public class ExerciseData {
         this.numReps = numReps;
     }
 
-    public double getAverageTime() {
+    public ArrayList<Integer> getAverageTime() {
         return averageTime;
     }
 
-    public void setAverageTime(double averageTime) {
+    public void setAverageTime(ArrayList<Integer> averageTime) {
         this.averageTime = averageTime;
     }
 

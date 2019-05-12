@@ -1,5 +1,7 @@
 package com.bitwiselifting.v1.AlgorithmCode;
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -12,7 +14,7 @@ public class StaticMethods {
 
 	public static ExerciseData analyseData(ArrayList<ArrayList<Float>> values){
 		float lowTolerance = 6; //if max above this value...
-		double zeroTolerance = .1;
+		double zeroTolerance = .2;
 		int numReps = 0;
 		/*
 		 * Gather relevant columns of data needed to perform analysis and filter data if needed
@@ -20,8 +22,15 @@ public class StaticMethods {
 		ArrayList<Float> dataColumn = StaticMethods.getColumn(values, 2);
 		ArrayList<Float> tiltColumn = StaticMethods.getColumn(values, 1);
 		ArrayList<Float> filteredData = StaticMethods.exponentialFilter(dataColumn);
-		values = StaticMethods.replaceColumn(values, filteredData, 2);
+		for(int i=0; i<filteredData.size();i++){
+			Float val = filteredData.get(i);
+			filteredData.set(i,val - 9.8f);
 
+		}
+		values = StaticMethods.replaceColumn(values, filteredData, 2);
+		for(Float f:filteredData) {
+			Log.d("DATA",Float.toString(f));
+		}
 		/*
 		 * Write the output of the filtered data for testing
 		 */
@@ -41,7 +50,7 @@ public class StaticMethods {
 			int locTime1 = StaticMethods.getColumn(values, 0).indexOf(temp.get(i)); //for the first zero get time 1
 			int locTime2 = StaticMethods.getColumn(values, 0).indexOf(temp.get(i+1)); //for the second zero get time 2
 			int timebetween = locTime2 - locTime1; 									//subtract them
-			Float max = StaticMethods.findMinAndMax(StaticMethods.getColumn(values, 3), locTime1, locTime2)[1]; //find the max between the two time points
+			Float max = StaticMethods.findMinAndMax(StaticMethods.getColumn(values, 2), locTime1, locTime2)[1]; //find the max between the two time points
 			if(max>lowTolerance) {													//is the max between them greater than out threshold?
 				System.out.println(timebetween + " | " + locTime1 + " | " + locTime2); //that's a rep
 				numReps++; //increment reps
@@ -54,16 +63,17 @@ public class StaticMethods {
 		 */
 		ArrayList<Double> valuesToWrite = new ArrayList<Double>();
 
+		/*
 		//create values
 		Double average = 0.0;
 		for(int i: timesBetweenReps){
 			average+=(double)i;
 		}
 		average = 1.0*average/timesBetweenReps.size();
-
+*/
 		ExerciseData ex = new ExerciseData();
 		ex.setNumReps(numReps);
-		ex.setAverageTime(average);
+		ex.setAverageTime(timesBetweenReps);
 
 
 		Float[] tilts = findMinAndMax(tiltColumn,0,tiltColumn.size()-1);

@@ -87,7 +87,8 @@ public class Exercise extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Workouts));
         workoutAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         workoutChoice.setAdapter(workoutAdapter);
-        TextView csv = findViewById(R.id.dataDump);
+        TextView one1 = findViewById(R.id.one1);
+        TextView two1 = findViewById(R.id.two1);
 
 
 
@@ -160,13 +161,39 @@ public class Exercise extends AppCompatActivity {
                         lastExData.add(new ArrayList<Float>(Arrays.asList(floatrow)));
                     }
 
-
-
                     ExerciseData cal = StaticMethods.analyseData(calibrationData);
                     ExerciseData current = StaticMethods.analyseData(lastExData);
 
-                    Log.d("Calibration:",Double.toString(cal.getAverageTime()));
-                    Log.d("Current:",Double.toString(current.getAverageTime()));
+                    //Log.d("Calibration:",Double.toString(cal.getAverageTime()));
+                    //Log.d("Current:",Double.toString(current.getAverageTime()));
+
+
+                    for(int j = 1; j < current.getNumReps()+1; j++) {
+                        String repsColumn = "one" + j;
+                        String dataColumn = "two" + j;
+                        int id1 = getResources().getIdentifier(repsColumn, "id", getPackageName());
+                        int id2 = getResources().getIdentifier(dataColumn, "id", getPackageName());
+                        TextView columnOne = findViewById(id1);
+                        TextView columnTwo = findViewById(id2);
+                        columnOne.setText(Integer.toString(j));
+                        int averageTime = 0;
+                        if(j < current.getAverageTime().size()+1) {
+                            averageTime = current.getAverageTime().get(j-1);
+                        }
+                        double timeThatIsGood = 0;
+                        for(int time: cal.getAverageTime()){
+                            timeThatIsGood+=time;
+                        }
+                        timeThatIsGood = 1.0*timeThatIsGood/cal.getAverageTime().size();
+                        double percentage = 100*(Math.abs(averageTime-timeThatIsGood)/(timeThatIsGood));
+                        /*if(percentage > 1){
+                            percentage = 1-percentage;
+                        }
+                        */
+                        Log.d("PERCENTAGE",Double.toString(percentage));
+                        String wasBad = percentage<25?"Good":"Fatigue";
+                        columnTwo.setText(wasBad);
+                    }
                 }
 
                 data.clear();
